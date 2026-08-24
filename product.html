@@ -5,29 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="공구 재고 정리 특가 판매 - 카카오톡 문의">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔧</text></svg>">
-<title>비전툴</title>
+<title>상품 상세</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="container header-inner">
-    <span class="logo">🔧 <span id="site-name">비전툴</span></span>
+    <a href="index.html" class="logo">🔧 <span id="site-name">비전툴</span></a>
     <button class="btn-kakao-nav" id="footer-contact-btn-nav">카카오톡 문의</button>
   </div>
 </header>
 
 <main class="container">
-  <section class="toolbar">
-    <nav id="category-tabs" class="category-tabs"></nav>
-    <div class="search-row">
-      <button type="button" id="search-open-btn" class="btn-secondary btn-search">🔍 검색</button>
-      <span id="search-active-chip" class="search-active-chip" style="display:none;"></span>
-      <span id="result-count" class="result-count"></span>
-    </div>
+  <p class="back-link"><a href="index.html">&larr; 목록으로 돌아가기</a></p>
+  <section id="product-detail" class="product-detail">
+    <p class="empty-state">상품 정보를 불러오는 중입니다...</p>
   </section>
-
-  <section id="product-grid" class="product-grid"></section>
 </main>
 
 <footer class="site-footer">
@@ -37,7 +31,6 @@
     <p id="contact-guide" class="footer-line-small"></p>
     <p id="business-hours" class="footer-line-small"></p>
     <button class="btn-primary" id="footer-contact-btn">카카오톡으로 문의하기</button>
-    <p class="admin-link"><a href="admin-login.html">관리자 로그인</a></p>
   </div>
 </footer>
 
@@ -54,21 +47,10 @@
   </div>
 </div>
 
-<div id="search-modal" class="modal">
-  <div class="modal-box">
-    <button class="modal-close" id="search-modal-close">&times;</button>
-    <h2>상품 검색</h2>
-    <form id="search-form" class="search-form">
-      <input type="text" id="search-modal-input" class="search-input" placeholder="상품명을 입력하세요">
-      <button type="submit" class="btn-primary">검색</button>
-    </form>
-  </div>
-</div>
-
 <script src="js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/shared.js"></script>
-<script src="js/main.js"></script>
+<script src="js/product.js"></script>
 </body>
 </html>

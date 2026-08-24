@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔧</text></svg>">
+<title>상품 관리</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+
+<header class="site-header">
+  <div class="container header-inner">
+    <span class="logo">🔧 상품 관리</span>
+    <button class="btn-kakao-nav" id="logout-btn">로그아웃</button>
+  </div>
+</header>
+
+<main class="container admin-main">
+  <section class="admin-panel">
+    <h2 id="form-title">새 상품 등록</h2>
+    <form id="product-form" class="admin-form">
+      <label for="f-name">상품명</label>
+      <input type="text" id="f-name" required>
+
+      <label for="f-category">카테고리</label>
+      <select id="f-category" required>
+        <option value="작업공구">작업공구</option>
+        <option value="철물·원예·사무용품">철물·원예·사무용품</option>
+        <option value="절삭·금형·공작">절삭·금형·공작</option>
+        <option value="측정·측량·계측">측정·측량·계측</option>
+        <option value="전동·다몬·엔진·하역">전동·다몬·엔진·하역</option>
+        <option value="에어·콤프레샤·유압">에어·콤프레샤·유압</option>
+        <option value="용접기자재">용접기자재</option>
+        <option value="안전용품">안전용품</option>
+        <option value="산업용품">산업용품</option>
+      </select>
+
+      <div class="form-row">
+        <div>
+          <label for="f-price">판매가 (원)</label>
+          <input type="number" id="f-price" min="0" required>
+        </div>
+        <div>
+          <label for="f-original-price">정가 (원, 선택)</label>
+          <input type="number" id="f-original-price" min="0">
+        </div>
+      </div>
+
+      <label class="checkbox-label">
+        <input type="checkbox" id="f-stock" checked>
+        판매중 (체크 해제 시 품절로 표시)
+      </label>
+
+      <label for="f-condition">상태 설명</label>
+      <input type="text" id="f-condition" placeholder="예: 미사용 새제품 / 사용감 있음 - 정상작동">
+
+      <label for="f-description">상세 설명</label>
+      <textarea id="f-description" rows="4"></textarea>
+
+      <label for="f-image">사진 (선택)</label>
+      <input type="file" id="f-image" accept="image/*">
+      <img id="image-preview" class="image-preview" style="display:none;">
+
+      <div class="form-actions">
+        <button type="submit" id="submit-btn" class="btn-primary">저장하기</button>
+        <button type="button" id="cancel-edit-btn" class="btn-secondary" style="display:none;">취소</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="admin-panel">
+    <h2>등록된 상품 (<span id="admin-count">0</span>개)</h2>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>사진</th>
+            <th>상품명</th>
+            <th>카테고리</th>
+            <th>가격</th>
+            <th>상태</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="admin-list"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

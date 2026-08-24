@@ -2,8 +2,6 @@
 const SITE_CONFIG = {
   siteName: "비전툴",
   tagline: "사업 정리 재고 특가전",
-  heroTitle: "공구 재고 정리 특가",
-  heroSubtitle: "오랜 시간 사용해온 공구들을 합리적인 가격으로 드립니다. 수량 한정, 선착순 마감!",
 
   // TODO: 실제 카카오톡 ID로 변경하세요.
   kakaoId: "visiontool_kakao",
