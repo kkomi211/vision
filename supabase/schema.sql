@@ -13,13 +13,15 @@ create table if not exists public.products (
   description text,
   image_url text,
   images jsonb not null default '[]'::jsonb,
+  description_images jsonb not null default '[]'::jsonb,
   specs jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now()
 );
 
--- 이미 products 테이블을 만든 적이 있다면 (컬럼이 없다면) 아래 두 줄만 추가로 실행하세요.
+-- 이미 products 테이블을 만든 적이 있다면 (컬럼이 없다면) 아래 세 줄만 추가로 실행하세요.
 alter table public.products add column if not exists specs jsonb not null default '[]'::jsonb;
 alter table public.products add column if not exists images jsonb not null default '[]'::jsonb;
+alter table public.products add column if not exists description_images jsonb not null default '[]'::jsonb;
 
 -- (선택) 기존에 image_url 에만 사진이 들어있던 상품들을 새 images 배열로 옮기고 싶다면 실행하세요.
 -- (실행 안 해도 화면에는 자동으로 image_url 이 대신 보이니 필수는 아닙니다.)

@@ -1,5 +1,6 @@
 let editingId = null;
 let existingImages = [];
+let existingDescImages = [];
 
 function formatPrice(n) {
   return n.toLocaleString("ko-KR") + "원";
@@ -93,11 +94,11 @@ async function loadAdminProducts() {
   });
 }
 
-function renderImagePreviews() {
-  const list = document.getElementById("image-preview-list");
-  const fileInput = document.getElementById("f-image");
+function renderImagePreviewList(listId, fileInputId, images, onRerender) {
+  const list = document.getElementById(listId);
+  const fileInput = document.getElementById(fileInputId);
 
-  const existingHtml = existingImages.map((url, idx) => `
+  const existingHtml = images.map((url, idx) => `
     <div class="image-preview-item">
       <img src="${url}">
       <button type="button" class="image-remove-btn" data-idx="${idx}" aria-label="이미지 삭제">&times;</button>
@@ -114,10 +115,18 @@ function renderImagePreviews() {
 
   list.querySelectorAll(".image-remove-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      existingImages.splice(Number(btn.dataset.idx), 1);
-      renderImagePreviews();
+      images.splice(Number(btn.dataset.idx), 1);
+      onRerender();
     });
   });
+}
+
+function renderImagePreviews() {
+  renderImagePreviewList("image-preview-list", "f-image", existingImages, renderImagePreviews);
+}
+
+function renderDescImagePreviews() {
+  renderImagePreviewList("desc-image-preview-list", "f-desc-image", existingDescImages, renderDescImagePreviews);
 }
 
 async function handleDelete(id) {
@@ -147,6 +156,10 @@ function fillFormForEdit(product) {
   document.getElementById("f-image").value = "";
   renderImagePreviews();
 
+  existingDescImages = (product.descriptionImages || []).slice();
+  document.getElementById("f-desc-image").value = "";
+  renderDescImagePreviews();
+
   document.getElementById("form-title").textContent = "상품 수정";
   document.getElementById("cancel-edit-btn").style.display = "inline-block";
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -155,15 +168,17 @@ function fillFormForEdit(product) {
 function resetForm() {
   editingId = null;
   existingImages = [];
+  existingDescImages = [];
   document.getElementById("product-form").reset();
   document.getElementById("spec-rows").innerHTML = "";
   document.getElementById("image-preview-list").innerHTML = "";
+  document.getElementById("desc-image-preview-list").innerHTML = "";
   document.getElementById("form-title").textContent = "새 상품 등록";
   document.getElementById("cancel-edit-btn").style.display = "none";
 }
 
-async function uploadNewImages() {
-  const fileInput = document.getElementById("f-image");
+async function uploadNewImages(fileInputId) {
+  const fileInput = document.getElementById(fileInputId);
   const urls = [];
 
   for (const file of Array.from(fileInput.files)) {
@@ -202,8 +217,11 @@ async function handleSubmit(e) {
     specs: getSpecsFromForm()
   };
 
-  const newUrls = await uploadNewImages();
+  const newUrls = await uploadNewImages("f-image");
   payload.images = [...existingImages, ...newUrls];
+
+  const newDescUrls = await uploadNewImages("f-desc-image");
+  payload.description_images = [...existingDescImages, ...newDescUrls];
 
   let error;
   if (editingId) {
@@ -234,6 +252,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
   document.getElementById("add-spec-btn").addEventListener("click", () => addSpecRow());
   document.getElementById("f-image").addEventListener("change", renderImagePreviews);
+  document.getElementById("f-desc-image").addEventListener("change", renderDescImagePreviews);
   document.getElementById("logout-btn").addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     location.href = "admin-login.html";

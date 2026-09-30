@@ -1,16 +1,17 @@
 :root {
-  --color-primary: #2563eb;
-  --color-dark: #0b1a3a;
+  --color-primary: #2153c4;
+  --color-dark: #101c33;
   --color-text: #1a2233;
   --color-muted: #64748b;
   --color-bg: #f4f8ff;
   --color-border: #dbe6f7;
-  --radius: 10px;
-  --shadow: 0 2px 10px rgba(37, 99, 235, 0.08);
-  --shadow-hover: 0 12px 26px rgba(37, 99, 235, 0.18);
-  --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-  --gradient-header: linear-gradient(135deg, #0b1a3a 0%, #12327a 55%, #2563eb 100%);
-  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+  --color-surface: #eef2f8;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(16, 28, 51, 0.08);
+  --shadow-hover: 0 4px 14px rgba(16, 28, 51, 0.12);
+  --gradient-primary: linear-gradient(135deg, #2c5cd4 0%, #1a41a0 100%);
+  --gradient-header: linear-gradient(160deg, #14213f 0%, #0c1526 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #eef2f8 100%);
 }
 
 * {
@@ -51,7 +52,8 @@ body {
 .logo {
   color: #fff;
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   text-decoration: none;
 }
 
@@ -213,13 +215,12 @@ body {
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 .product-card:hover {
-  border-color: transparent;
+  border-color: var(--color-primary);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-3px);
 }
 
 .product-card.sold-out {
@@ -269,7 +270,10 @@ body {
 }
 
 .product-category {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--color-muted);
 }
 
@@ -368,7 +372,7 @@ body {
 .modal-box {
   background: #fff;
   border-radius: var(--radius);
-  box-shadow: var(--shadow-hover);
+  box-shadow: 0 8px 24px rgba(16, 28, 51, 0.18);
   padding: 28px 24px;
   max-width: 360px;
   width: 100%;
@@ -587,6 +591,20 @@ body {
 
 .btn-contact-detail {
   align-self: flex-start;
+}
+
+.description-images {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 720px;
+  margin: 0 auto 40px;
+}
+
+.description-image {
+  width: 100%;
+  border-radius: var(--radius);
+  display: block;
 }
 
 .spec-title {

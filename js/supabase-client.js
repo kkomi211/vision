@@ -29,6 +29,7 @@ function mapProductRow(row) {
     condition: row.condition,
     description: row.description,
     images: images,
+    descriptionImages: row.description_images || [],
     specs: row.specs || []
   };
 }

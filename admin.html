@@ -12,7 +12,7 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <span class="logo">🔧 상품 관리</span>
+    <span class="logo">상품 관리</span>
     <button class="btn-kakao-nav" id="logout-btn">로그아웃</button>
   </div>
 </header>
@@ -58,6 +58,10 @@
 
       <label for="f-description">상세 설명</label>
       <textarea id="f-description" rows="4"></textarea>
+
+      <label for="f-desc-image">상세 설명 사진 (선택, 여러 장 가능)</label>
+      <input type="file" id="f-desc-image" accept="image/*" multiple>
+      <div id="desc-image-preview-list" class="image-preview-list"></div>
 
       <label>추가 정보 (선택)</label>
       <div id="spec-rows" class="spec-rows"></div>

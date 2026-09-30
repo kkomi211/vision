@@ -31,7 +31,20 @@ function renderProductDetail(p) {
     openContactModal(p);
   });
 
+  renderDescriptionImages(p);
   renderSpecTable(p);
+}
+
+function renderDescriptionImages(p) {
+  const section = document.getElementById("product-description-images");
+  const images = p.descriptionImages || [];
+
+  if (images.length === 0) {
+    section.innerHTML = "";
+    return;
+  }
+
+  section.innerHTML = images.map(url => `<img src="${url}" alt="${p.name} 상세 이미지" class="description-image">`).join("");
 }
 
 function changeImage(p, delta) {
