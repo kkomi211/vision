@@ -50,8 +50,8 @@ function fitCategoryTabs() {
 }
 
 function productCard(p) {
-  const thumb = p.image
-    ? `<img src="${p.image}" alt="${p.name}" class="product-thumb-img">`
+  const thumb = p.images && p.images[0]
+    ? `<img src="${p.images[0]}" alt="${p.name}" class="product-thumb-img">`
     : `<div class="product-thumb-placeholder">${CATEGORY_ICONS[p.category] || "🔩"}</div>`;
 
   return `

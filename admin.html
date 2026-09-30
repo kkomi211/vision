@@ -63,9 +63,9 @@
       <div id="spec-rows" class="spec-rows"></div>
       <button type="button" id="add-spec-btn" class="btn-secondary btn-add-spec">+ 항목 추가</button>
 
-      <label for="f-image">사진 (선택)</label>
-      <input type="file" id="f-image" accept="image/*">
-      <img id="image-preview" class="image-preview" style="display:none;">
+      <label for="f-image">사진 (여러 장 선택 가능)</label>
+      <input type="file" id="f-image" accept="image/*" multiple>
+      <div id="image-preview-list" class="image-preview-list"></div>
 
       <div class="form-actions">
         <button type="submit" id="submit-btn" class="btn-primary">저장하기</button>

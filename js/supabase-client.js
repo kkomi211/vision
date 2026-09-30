@@ -15,6 +15,10 @@ function isSupabaseConfigured() {
 }
 
 function mapProductRow(row) {
+  const images = Array.isArray(row.images) && row.images.length > 0
+    ? row.images
+    : (row.image_url ? [row.image_url] : []);
+
   return {
     id: row.id,
     name: row.name,
@@ -24,7 +28,7 @@ function mapProductRow(row) {
     stock: row.stock,
     condition: row.condition,
     description: row.description,
-    image: row.image_url || "",
+    images: images,
     specs: row.specs || []
   };
 }

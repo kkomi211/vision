@@ -1,4 +1,5 @@
 let editingId = null;
+let existingImages = [];
 
 function formatPrice(n) {
   return n.toLocaleString("ko-KR") + "원";
@@ -45,8 +46,8 @@ async function requireAuth() {
 }
 
 function adminRow(p) {
-  const thumb = p.image
-    ? `<img src="${p.image}" alt="${p.name}" class="admin-thumb">`
+  const thumb = p.images && p.images[0]
+    ? `<img src="${p.images[0]}" alt="${p.name}" class="admin-thumb">`
     : `<div class="admin-thumb admin-thumb-placeholder">📦</div>`;
 
   return `
@@ -92,6 +93,33 @@ async function loadAdminProducts() {
   });
 }
 
+function renderImagePreviews() {
+  const list = document.getElementById("image-preview-list");
+  const fileInput = document.getElementById("f-image");
+
+  const existingHtml = existingImages.map((url, idx) => `
+    <div class="image-preview-item">
+      <img src="${url}">
+      <button type="button" class="image-remove-btn" data-idx="${idx}" aria-label="이미지 삭제">&times;</button>
+    </div>
+  `).join("");
+
+  const newHtml = Array.from(fileInput.files).map(file => `
+    <div class="image-preview-item image-preview-new">
+      <img src="${URL.createObjectURL(file)}">
+    </div>
+  `).join("");
+
+  list.innerHTML = existingHtml + newHtml;
+
+  list.querySelectorAll(".image-remove-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      existingImages.splice(Number(btn.dataset.idx), 1);
+      renderImagePreviews();
+    });
+  });
+}
+
 async function handleDelete(id) {
   if (!confirm("정말 삭제하시겠습니까?")) return;
   const { error } = await supabaseClient.from("products").delete().eq("id", id);
@@ -115,13 +143,9 @@ function fillFormForEdit(product) {
   document.getElementById("spec-rows").innerHTML = "";
   (product.specs || []).forEach(spec => addSpecRow(spec.name, spec.description));
 
-  const preview = document.getElementById("image-preview");
-  if (product.image) {
-    preview.src = product.image;
-    preview.style.display = "block";
-  } else {
-    preview.style.display = "none";
-  }
+  existingImages = (product.images || []).slice();
+  document.getElementById("f-image").value = "";
+  renderImagePreviews();
 
   document.getElementById("form-title").textContent = "상품 수정";
   document.getElementById("cancel-edit-btn").style.display = "inline-block";
@@ -130,29 +154,33 @@ function fillFormForEdit(product) {
 
 function resetForm() {
   editingId = null;
+  existingImages = [];
   document.getElementById("product-form").reset();
   document.getElementById("spec-rows").innerHTML = "";
-  document.getElementById("image-preview").style.display = "none";
+  document.getElementById("image-preview-list").innerHTML = "";
   document.getElementById("form-title").textContent = "새 상품 등록";
   document.getElementById("cancel-edit-btn").style.display = "none";
 }
 
-async function uploadImageIfNeeded() {
+async function uploadNewImages() {
   const fileInput = document.getElementById("f-image");
-  const file = fileInput.files[0];
-  if (!file) return null;
+  const urls = [];
 
-  const fileExt = file.name.split(".").pop();
-  const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${fileExt}`;
+  for (const file of Array.from(fileInput.files)) {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${fileExt}`;
 
-  const { error } = await supabaseClient.storage.from("product-images").upload(fileName, file);
-  if (error) {
-    alert("이미지 업로드 실패: " + error.message);
-    return null;
+    const { error } = await supabaseClient.storage.from("product-images").upload(fileName, file);
+    if (error) {
+      alert(`"${file.name}" 업로드 실패: ${error.message}`);
+      continue;
+    }
+
+    const { data } = supabaseClient.storage.from("product-images").getPublicUrl(fileName);
+    urls.push(data.publicUrl);
   }
 
-  const { data } = supabaseClient.storage.from("product-images").getPublicUrl(fileName);
-  return data.publicUrl;
+  return urls;
 }
 
 async function handleSubmit(e) {
@@ -174,14 +202,13 @@ async function handleSubmit(e) {
     specs: getSpecsFromForm()
   };
 
-  const imageUrl = await uploadImageIfNeeded();
-  if (imageUrl) payload.image_url = imageUrl;
+  const newUrls = await uploadNewImages();
+  payload.images = [...existingImages, ...newUrls];
 
   let error;
   if (editingId) {
     ({ error } = await supabaseClient.from("products").update(payload).eq("id", editingId));
   } else {
-    if (!imageUrl) payload.image_url = "";
     ({ error } = await supabaseClient.from("products").insert(payload));
   }
 
@@ -206,6 +233,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("product-form").addEventListener("submit", handleSubmit);
   document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
   document.getElementById("add-spec-btn").addEventListener("click", () => addSpecRow());
+  document.getElementById("f-image").addEventListener("change", renderImagePreviews);
   document.getElementById("logout-btn").addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     location.href = "admin-login.html";

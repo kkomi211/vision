@@ -463,6 +463,12 @@ body {
   padding: 8px 0 60px;
 }
 
+.detail-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .detail-thumb {
   position: relative;
   aspect-ratio: 1 / 1;
@@ -473,6 +479,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  touch-action: pan-y;
 }
 
 .detail-thumb-placeholder {
@@ -483,6 +490,79 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--color-primary);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+
+.gallery-prev {
+  left: 10px;
+}
+
+.gallery-next {
+  right: 10px;
+}
+
+.gallery-nav:hover {
+  background: #fff;
+}
+
+.gallery-counter {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(11, 26, 58, 0.7);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+.detail-thumb-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.gallery-thumb-btn {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: var(--radius);
+  border: 2px solid var(--color-border);
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+}
+
+.gallery-thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-thumb-btn.active {
+  border-color: var(--color-primary);
 }
 
 .detail-body {
@@ -675,11 +755,44 @@ body {
   align-self: flex-start;
 }
 
-.image-preview {
+.image-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 10px;
-  max-width: 160px;
+}
+
+.image-preview-item {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: var(--radius);
   border: 1px solid var(--color-border);
+}
+
+.image-preview-new img {
+  border-color: var(--color-primary);
+}
+
+.image-remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-dark);
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .form-actions {

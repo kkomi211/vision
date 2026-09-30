@@ -12,12 +12,21 @@ create table if not exists public.products (
   condition text,
   description text,
   image_url text,
+  images jsonb not null default '[]'::jsonb,
   specs jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now()
 );
 
--- 이미 products 테이블을 만든 적이 있다면 (specs 컬럼이 없다면) 아래 한 줄만 추가로 실행하세요.
+-- 이미 products 테이블을 만든 적이 있다면 (컬럼이 없다면) 아래 두 줄만 추가로 실행하세요.
 alter table public.products add column if not exists specs jsonb not null default '[]'::jsonb;
+alter table public.products add column if not exists images jsonb not null default '[]'::jsonb;
+
+-- (선택) 기존에 image_url 에만 사진이 들어있던 상품들을 새 images 배열로 옮기고 싶다면 실행하세요.
+-- (실행 안 해도 화면에는 자동으로 image_url 이 대신 보이니 필수는 아닙니다.)
+update public.products
+set images = jsonb_build_array(image_url)
+where (images is null or images = '[]'::jsonb)
+  and image_url is not null and image_url <> '';
 
 -- 2. 기본 테이블 접근 권한 부여 (RLS 정책과는 별개로 반드시 필요합니다)
 --    이게 없으면 정책을 다 맞게 설정해도 "permission denied for table products" 오류가 납니다.
