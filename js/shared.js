@@ -17,11 +17,6 @@ function formatPrice(n) {
   return n.toLocaleString("ko-KR") + "원";
 }
 
-function discountRate(price, originalPrice) {
-  if (!originalPrice || originalPrice <= price) return 0;
-  return Math.round((1 - price / originalPrice) * 100);
-}
-
 function applySiteConfig() {
   document.title = `${SITE_CONFIG.siteName} - ${SITE_CONFIG.tagline}`;
   document.getElementById("site-name").textContent = SITE_CONFIG.siteName;

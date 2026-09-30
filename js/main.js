@@ -50,7 +50,6 @@ function fitCategoryTabs() {
 }
 
 function productCard(p) {
-  const rate = discountRate(p.price, p.originalPrice);
   const thumb = p.image
     ? `<img src="${p.image}" alt="${p.name}" class="product-thumb-img">`
     : `<div class="product-thumb-placeholder">${CATEGORY_ICONS[p.category] || "🔩"}</div>`;
@@ -59,19 +58,16 @@ function productCard(p) {
     <article class="product-card${p.stock ? "" : " sold-out"}" data-id="${p.id}">
       <div class="product-thumb">
         ${thumb}
-        ${rate > 0 ? `<span class="badge badge-discount">${rate}% ↓</span>` : ""}
         ${!p.stock ? `<span class="badge badge-soldout">품절</span>` : ""}
       </div>
       <div class="product-body">
         <span class="product-category">${p.category}</span>
         <h3 class="product-name">${p.name}</h3>
-        <p class="product-condition">${p.condition}</p>
         <div class="product-price-row">
-          ${rate > 0 ? `<span class="price-original">${formatPrice(p.originalPrice)}</span>` : ""}
           <span class="price-current">${formatPrice(p.price)}</span>
         </div>
         <button class="btn-contact" ${p.stock ? "" : "disabled"}>
-          ${p.stock ? "카카오톡으로 문의하기" : "재입고 문의하기"}
+          ${p.stock ? "구매 문의하기" : "재입고 문의하기"}
         </button>
       </div>
     </article>

@@ -12,8 +12,12 @@ create table if not exists public.products (
   condition text,
   description text,
   image_url text,
+  specs jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now()
 );
+
+-- 이미 products 테이블을 만든 적이 있다면 (specs 컬럼이 없다면) 아래 한 줄만 추가로 실행하세요.
+alter table public.products add column if not exists specs jsonb not null default '[]'::jsonb;
 
 -- 2. 기본 테이블 접근 권한 부여 (RLS 정책과는 별개로 반드시 필요합니다)
 --    이게 없으면 정책을 다 맞게 설정해도 "permission denied for table products" 오류가 납니다.

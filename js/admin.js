@@ -4,6 +4,32 @@ function formatPrice(n) {
   return n.toLocaleString("ko-KR") + "원";
 }
 
+function escapeAttr(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+}
+
+function addSpecRow(name = "", description = "") {
+  const container = document.getElementById("spec-rows");
+  const row = document.createElement("div");
+  row.className = "spec-row";
+  row.innerHTML = `
+    <input type="text" class="spec-name" placeholder="이름 (예: 무게)" value="${escapeAttr(name)}">
+    <input type="text" class="spec-desc" placeholder="설명 (예: 1.5kg)" value="${escapeAttr(description)}">
+    <button type="button" class="spec-remove-btn" aria-label="항목 삭제">&times;</button>
+  `;
+  row.querySelector(".spec-remove-btn").addEventListener("click", () => row.remove());
+  container.appendChild(row);
+}
+
+function getSpecsFromForm() {
+  return Array.from(document.querySelectorAll("#spec-rows .spec-row"))
+    .map(row => ({
+      name: row.querySelector(".spec-name").value.trim(),
+      description: row.querySelector(".spec-desc").value.trim()
+    }))
+    .filter(spec => spec.name || spec.description);
+}
+
 async function requireAuth() {
   if (!isSupabaseConfigured()) {
     document.querySelector(".admin-main").innerHTML =
@@ -86,6 +112,9 @@ function fillFormForEdit(product) {
   document.getElementById("f-condition").value = product.condition || "";
   document.getElementById("f-description").value = product.description || "";
 
+  document.getElementById("spec-rows").innerHTML = "";
+  (product.specs || []).forEach(spec => addSpecRow(spec.name, spec.description));
+
   const preview = document.getElementById("image-preview");
   if (product.image) {
     preview.src = product.image;
@@ -102,6 +131,7 @@ function fillFormForEdit(product) {
 function resetForm() {
   editingId = null;
   document.getElementById("product-form").reset();
+  document.getElementById("spec-rows").innerHTML = "";
   document.getElementById("image-preview").style.display = "none";
   document.getElementById("form-title").textContent = "새 상품 등록";
   document.getElementById("cancel-edit-btn").style.display = "none";
@@ -140,7 +170,8 @@ async function handleSubmit(e) {
     original_price: originalPriceVal ? Number(originalPriceVal) : null,
     stock: document.getElementById("f-stock").checked,
     condition: document.getElementById("f-condition").value.trim(),
-    description: document.getElementById("f-description").value.trim()
+    description: document.getElementById("f-description").value.trim(),
+    specs: getSpecsFromForm()
   };
 
   const imageUrl = await uploadImageIfNeeded();
@@ -174,6 +205,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("product-form").addEventListener("submit", handleSubmit);
   document.getElementById("cancel-edit-btn").addEventListener("click", resetForm);
+  document.getElementById("add-spec-btn").addEventListener("click", () => addSpecRow());
   document.getElementById("logout-btn").addEventListener("click", async () => {
     await supabaseClient.auth.signOut();
     location.href = "admin-login.html";

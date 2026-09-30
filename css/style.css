@@ -1,14 +1,16 @@
 :root {
-  --color-primary: #1e4e8c;
-  --color-primary-dark: #163a68;
-  --color-dark: #101828;
-  --color-dark-2: #1a2332;
-  --color-text: #1f2430;
+  --color-primary: #2563eb;
+  --color-dark: #0b1a3a;
+  --color-text: #1a2233;
   --color-muted: #64748b;
-  --color-bg: #f5f6f8;
-  --color-border: #d9dde3;
-  --radius: 4px;
-  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --color-bg: #f4f8ff;
+  --color-border: #dbe6f7;
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(37, 99, 235, 0.08);
+  --shadow-hover: 0 12px 26px rgba(37, 99, 235, 0.18);
+  --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  --gradient-header: linear-gradient(135deg, #0b1a3a 0%, #12327a 55%, #2563eb 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
 }
 
 * {
@@ -32,7 +34,7 @@ body {
 
 /* Header */
 .site-header {
-  background: var(--color-dark);
+  background: var(--gradient-header);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -54,8 +56,8 @@ body {
 }
 
 .btn-kakao-nav {
-  background: #fee500;
-  color: #191919;
+  background: #fff;
+  color: var(--color-primary);
   border: none;
   padding: 8px 16px;
   border-radius: var(--radius);
@@ -69,7 +71,7 @@ body {
 }
 
 .btn-primary {
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -77,11 +79,15 @@ body {
   font-weight: 700;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: filter 0.15s ease, transform 0.15s ease;
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-dark);
+  filter: brightness(1.08);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
 }
 
 /* Toolbar */
@@ -120,9 +126,9 @@ body {
 }
 
 .tab-btn.active {
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: #fff;
-  border-color: var(--color-primary);
+  border-color: transparent;
 }
 
 .search-row {
@@ -204,13 +210,16 @@ body {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   overflow: hidden;
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  transition: border-color 0.15s ease;
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .product-card:hover {
-  border-color: var(--color-primary);
+  border-color: transparent;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
 }
 
 .product-card.sold-out {
@@ -220,7 +229,7 @@ body {
 .product-thumb {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #f0f1f3;
+  background: var(--gradient-surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -247,11 +256,6 @@ body {
   color: #fff;
 }
 
-.badge-discount {
-  left: 8px;
-  background: var(--color-primary);
-}
-
 .badge-soldout {
   right: 8px;
   background: #3a3f4b;
@@ -276,23 +280,11 @@ body {
   min-height: 2.6em;
 }
 
-.product-condition {
-  font-size: 0.8rem;
-  color: var(--color-muted);
-  margin-bottom: 4px;
-}
-
 .product-price-row {
   display: flex;
   align-items: baseline;
   gap: 8px;
   margin-bottom: 12px;
-}
-
-.price-original {
-  font-size: 0.8rem;
-  color: #9aa0ab;
-  text-decoration: line-through;
 }
 
 .price-current {
@@ -303,8 +295,8 @@ body {
 
 .btn-contact {
   width: 100%;
-  background: #fee500;
-  color: #191919;
+  background: var(--gradient-primary);
+  color: #fff;
   border: none;
   padding: 10px;
   border-radius: var(--radius);
@@ -314,7 +306,7 @@ body {
 }
 
 .btn-contact:hover:not(:disabled) {
-  filter: brightness(0.96);
+  filter: brightness(1.08);
 }
 
 .btn-contact:disabled {
@@ -325,7 +317,7 @@ body {
 
 /* Footer */
 .site-footer {
-  background: var(--color-dark);
+  background: var(--gradient-header);
   color: #cbd0da;
   text-align: center;
   padding: 44px 20px 52px;
@@ -376,6 +368,7 @@ body {
 .modal-box {
   background: #fff;
   border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
   padding: 28px 24px;
   max-width: 360px;
   width: 100%;
@@ -411,8 +404,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: #fef9e0;
-  border: 1px solid #fee500;
+  background: #eef4ff;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: 12px;
   margin-bottom: 14px;
@@ -421,7 +414,8 @@ body {
 }
 
 .btn-copy {
-  background: #fee500;
+  background: var(--gradient-primary);
+  color: #fff;
   border: none;
   padding: 6px 12px;
   border-radius: var(--radius);
@@ -472,7 +466,7 @@ body {
 .detail-thumb {
   position: relative;
   aspect-ratio: 1 / 1;
-  background: #f0f1f3;
+  background: var(--gradient-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   display: flex;
@@ -515,6 +509,32 @@ body {
   align-self: flex-start;
 }
 
+.spec-title {
+  font-size: 1.1rem;
+  margin: 8px 0 12px;
+}
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
+  font-size: 0.9rem;
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.spec-table th {
+  width: 30%;
+  background: var(--color-bg);
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
 @media (min-width: 720px) {
   .product-detail {
     grid-template-columns: 1fr 1fr;
@@ -531,6 +551,7 @@ body {
   margin: 80px auto;
   background: #fff;
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
   padding: 32px 28px;
   border-radius: var(--radius);
 }
@@ -588,6 +609,7 @@ body {
 .admin-panel {
   background: #fff;
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow);
   border-radius: var(--radius);
   padding: 24px;
 }
@@ -614,6 +636,43 @@ body {
 
 .checkbox-label input {
   width: auto;
+}
+
+.spec-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.spec-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+}
+
+.spec-row input {
+  margin: 0;
+}
+
+.spec-remove-btn {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  width: 38px;
+  cursor: pointer;
+}
+
+.spec-remove-btn:hover {
+  background: var(--color-bg);
+}
+
+.btn-add-spec {
+  margin-top: 10px;
+  align-self: flex-start;
 }
 
 .image-preview {
